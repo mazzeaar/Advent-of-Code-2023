@@ -1,16 +1,19 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include <string>
-#include <vector>
+#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <algorithm>
-#include <iostream>
+
+#include <string>
+#include <vector>
 #include <map>
-#include <set>
 #include <unordered_map>
+#include <set>
 #include <unordered_set>
+#include <algorithm>
+#include <numeric>
+#include <cctype>
 
 /*
 generic input reading function
@@ -41,6 +44,13 @@ inline void print_solution(T solution, T expected_solution)
     else {
         std::cout << solution;
     }
+}
+
+template <typename T>
+inline std::vector<T> nr_string_to_vector(const std::string& input)
+{
+    std::istringstream ss(input);
+    return std::vector<T>(std::istream_iterator<T>(ss), std::istream_iterator<T>());
 }
 
 #endif // COMMON_H

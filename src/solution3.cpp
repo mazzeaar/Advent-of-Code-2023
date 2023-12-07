@@ -9,21 +9,21 @@
 
 inline bool is_symbol(char s)
 {
-    return s != '.' && !isdigit(s);
+    return s != '.' && !std::isdigit(s);
 }
 
 // inefficient but idc
-bool is_part(const std::vector<std::vector<char>>& s, int row, int col, int nsize)
+bool is_part(const std::vector<std::string>& s, int row, int col, int nsize)
 {
     for ( int i = 0; i < nsize; ++i ) {
         int currentCol = col + i;
 
-        for ( int dr = -1; dr <= 1; ++dr ) {
-            for ( int dc = -1; dc <= 1; ++dc ) {
-                if ( dr == 0 && dc == 0 ) continue;
+        for ( int rowOffset = -1; rowOffset <= 1; ++rowOffset ) {
+            for ( int colOffset = -1; colOffset <= 1; ++colOffset ) {
+                if ( rowOffset == 0 && colOffset == 0 ) continue;
 
-                int checkRow = row + dr;
-                int checkCol = currentCol + dc;
+                int checkRow = row + rowOffset;
+                int checkCol = currentCol + colOffset;
 
                 if ( checkRow >= 0 && checkRow < s.size() &&
                     checkCol >= 0 && checkCol < s[0].size() &&
@@ -37,37 +37,24 @@ bool is_part(const std::vector<std::vector<char>>& s, int row, int col, int nsiz
     return false;
 }
 
-std::vector<std::vector<char>> getinput(const std::string& path)
-{
-    std::vector<std::vector<char>> s;
-    std::vector<std::string> input = get_input(path);
-
-    for ( auto& line : input ) {
-        std::vector<char> cline(line.begin(), line.end());
-        s.push_back(cline);
-    }
-
-    return s;
-}
-
-unsigned long long gear_ratio(const std::vector<std::vector<char>>& s, int r, int c)
+unsigned long long gear_ratio(const std::vector<std::string>& grid, int r, int c)
 {
     std::set<int> unique_parts;
 
-    for ( int dr = -1; dr <= 1; ++dr ) {
-        for ( int dc = -1; dc <= 1; ++dc ) {
-            if ( dr == 0 && dc == 0 ) continue;
+    for ( int rowOffset = -1; rowOffset <= 1; ++rowOffset ) {
+        for ( int colOffset = -1; colOffset <= 1; ++colOffset ) {
+            if ( rowOffset == 0 && colOffset == 0 ) continue;
 
-            int checkRow = r + dr, checkCol = c + dc;
-            if ( checkRow < 0 || checkRow >= s.size() || checkCol < 0 || checkCol >= s[0].size() ) continue;
+            int checkRow = r + rowOffset, checkCol = c + colOffset;
+            if ( checkRow < 0 || checkRow >= grid.size() || checkCol < 0 || checkCol >= grid[0].size() ) continue;
 
-            if ( isdigit(s[checkRow][checkCol]) && is_part(s, checkRow, checkCol, 1) ) {
+            if ( std::isdigit(grid[checkRow][checkCol]) && is_part(grid, checkRow, checkCol, 1) ) {
                 int startCol = checkCol;
-                while ( startCol > 0 && isdigit(s[checkRow][startCol - 1]) ) startCol--;
+                while ( startCol > 0 && std::isdigit(grid[checkRow][startCol - 1]) ) startCol--;
 
                 int number = 0;
-                for ( int i = startCol; i < s[0].size() && isdigit(s[checkRow][i]); ++i ) {
-                    number = number * 10 + (s[checkRow][i] - '0');
+                for ( int i = startCol; i < grid[0].size() && std::isdigit(grid[checkRow][i]); ++i ) {
+                    number = number * 10 + (grid[checkRow][i] - '0');
                 }
 
                 unique_parts.insert(number);
@@ -81,17 +68,17 @@ unsigned long long gear_ratio(const std::vector<std::vector<char>>& s, int r, in
 template <>
 void solution<3>::part1(const std::string& input_path)
 {
-    std::vector<std::vector<char>> input = getinput(input_path);
+    auto input = get_input(input_path);
 
-    unsigned long long sum = 0;
+    unsigned long long result = 0;
     const int h = input.size();
     const int w = input[0].size();
 
     for ( int r = 0; r < h; ++r ) {
         for ( int c = 0; c < w; ++c ) {
-            if ( isdigit(input[r][c]) ) {
+            if ( std::isdigit(input[r][c]) ) {
                 int nsize = 0;
-                for ( int i = c; i < w && isdigit(input[r][i]); ++i ) {
+                for ( int i = c; i < w && std::isdigit(input[r][i]); ++i ) {
                     nsize++;
                 }
 
@@ -100,7 +87,7 @@ void solution<3>::part1(const std::string& input_path)
                     for ( int i = c; i < c + nsize; ++i ) {
                         number = number * 10 + (input[r][i] - '0');
                     }
-                    sum += number;
+                    result += number;
                 }
 
                 c += nsize - 1;
@@ -109,26 +96,23 @@ void solution<3>::part1(const std::string& input_path)
     }
 
     const unsigned long long expected_solution = 532331;
-    print_solution(sum, expected_solution);
+    print_solution(result, expected_solution);
 }
 
 template <>
 void solution<3>::part2(const std::string& input_path)
 {
-    std::vector<std::vector<char>> input = getinput(input_path);
-    unsigned long long total_gear_ratio = 0;
-    const int h = input.size();
-    const int w = input[0].size();
+    const std::vector<std::string> input = get_input(input_path);
+    unsigned long long result = 0;
 
-    for ( int r = 0; r < h; ++r ) {
-        for ( int c = 0; c < w; ++c ) {
-            if ( input[r][c] == '*' ) {
-                unsigned long long ratio = gear_ratio(input, r, c);
-                total_gear_ratio += ratio;
+    for ( const auto& row : input ) {
+        for ( const auto& col : row ) {
+            if ( col == '*' ) {
+                result += gear_ratio(input, &row - &input[0], &col - &row[0]);
             }
         }
     }
 
     const unsigned long long expected_solution = 82301120;
-    print_solution(total_gear_ratio, expected_solution);
+    print_solution(result, expected_solution);
 }

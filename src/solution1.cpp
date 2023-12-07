@@ -1,12 +1,14 @@
 #include "../include/solution.h"
 
-std::string& replace_literal_numbers(std::string& line)
-{
-    const std::vector <std::string> numbers = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+// global vairable for only this file
+static const std::array<std::string, 9> numbers = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
+inline std::string& replace_literal_numbers(std::string& line)
+{
     for ( int i = 0; i < numbers.size(); ++i ) {
         size_t idx = 0;
         while ( (idx = line.find(numbers[i], idx)) != std::string::npos ) {
+            // one -> o1e (this way twone -> t2o1e, instead of 2ne)
             line.replace(++idx, 1, std::to_string(i + 1));
         }
     }
@@ -14,26 +16,24 @@ std::string& replace_literal_numbers(std::string& line)
     return line;
 }
 
-int parse_line(const std::string& line)
+inline int parse_line(const std::string& line)
 {
-    int i, val = 0;
+    auto first_it = std::find_if(line.begin(), line.end(), [ ] (char c) { return std::isdigit(c); });
+    int first_digit = first_it != line.end() ? *first_it - '0' : 0;
 
-    for ( i = 0; i < line.size() && !(line[i] >= '0' && line[i] <= '9'); ++i ) { }
-    val += 10 * (line[i] - '0');
+    auto last_it = std::find_if(line.rbegin(), line.rend(), [ ] (char c) { return std::isdigit(c); });
+    int last_digit = last_it != line.rend() ? *last_it - '0' : 0;
 
-    for ( i = line.size() - 1; i >= 0 && !(line[i] >= '0' && line[i] <= '9'); --i ) { }
-    val += (line[i] - '0');
-
-    return val;
+    return 10 * first_digit + last_digit;
 }
 
 template <>
 void solution<1>::part1(const std::string& input_path)
 {
-    int res = 0;
-    for ( auto& line : get_input(input_path) ) {
-        res += parse_line(line);
-    }
+    std::vector<std::string> input = get_input(input_path);
+    int res = std::accumulate(input.begin(), input.end(), 0, [ ] (int acc, std::string& line) {
+        return acc + parse_line(line);
+    });
 
     const int expected_solution = 54697;
     print_solution(res, expected_solution);
@@ -42,10 +42,10 @@ void solution<1>::part1(const std::string& input_path)
 template <>
 void solution<1>::part2(const std::string& input_path)
 {
-    int res = 0;
-    for ( auto& line : get_input(input_path) ) {
-        res += parse_line(replace_literal_numbers(line));
-    }
+    std::vector<std::string> input = get_input(input_path);
+    int res = std::accumulate(input.begin(), input.end(), 0, [ ] (int acc, std::string& line) {
+        return acc + parse_line(replace_literal_numbers(line));
+    });
 
     const int expected_solution = 54885;
     print_solution(res, expected_solution);
