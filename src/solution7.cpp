@@ -92,16 +92,14 @@ int compute_score(const std::vector<Input>& input)
 template <>
 void solution<7>::part1(const std::string& input_path)
 {
-    std::vector<std::string> file = get_input(input_path);
-
     std::vector<Input> parsed_input;
-    for ( const auto& line : file ) {
+    for ( const auto& line : get_input(input_path) ) {
         parsed_input.emplace_back(line);
     }
 
     std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input& lhs, const Input& rhs) {
         return lhs.comparator(rhs, false);
-        });
+    });
 
     int solution = compute_score(parsed_input);
     const int expected_solution = 250232501;
@@ -112,16 +110,14 @@ void solution<7>::part1(const std::string& input_path)
 template <>
 void solution<7>::part2(const std::string& input_path)
 {
-    std::vector<std::string> file = get_input(input_path);
-
     std::vector<Input> parsed_input;
-    for ( const auto& line : file ) {
+    for ( const auto& line : get_input(input_path) ) {
         parsed_input.emplace_back(line);
     }
 
     std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input& lhs, const Input& rhs) {
         return lhs.comparator(rhs, true);
-        });
+    });
 
     int solution = compute_score(parsed_input);
     const int expected_solution = 249138943;
