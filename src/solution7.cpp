@@ -1,8 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <unordered_map>
+#include "../include/solution.h"
 
 enum hand_type {
     high_card = 0,
@@ -93,39 +89,42 @@ int compute_score(const std::vector<Input>& input)
     return sum;
 }
 
-int p1(std::vector<Input>& input)
+template <>
+void solution<7>::part1(const std::string& input_path)
 {
-    std::sort(input.begin(), input.end(), [ ] (const Input& lhs, const Input& rhs) {
+    std::vector<std::string> file = get_input(input_path);
+
+    std::vector<Input> parsed_input;
+    for ( const auto& line : file ) {
+        parsed_input.emplace_back(line);
+    }
+
+    std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input& lhs, const Input& rhs) {
         return lhs.comparator(rhs, false);
-    });
+        });
 
-    return compute_score(input);
+    int solution = compute_score(parsed_input);
+    const int expected_solution = 250232501;
+
+    print_solution(solution, expected_solution);
 }
 
-int p2(std::vector<Input>& input)
+template <>
+void solution<7>::part2(const std::string& input_path)
 {
-    std::sort(input.begin(), input.end(), [ ] (const Input& lhs, const Input& rhs) {
+    std::vector<std::string> file = get_input(input_path);
+
+    std::vector<Input> parsed_input;
+    for ( const auto& line : file ) {
+        parsed_input.emplace_back(line);
+    }
+
+    std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input& lhs, const Input& rhs) {
         return lhs.comparator(rhs, true);
-    });
+        });
 
-    return compute_score(input);
-}
+    int solution = compute_score(parsed_input);
+    const int expected_solution = 249138943;
 
-int main()
-{
-    const std::string path = "input.txt";
-    std::fstream file(path, std::ios::in);
-    if ( !file.is_open() ) {
-        std::cout << "failed to open file\n";
-        return {};
-    }
-
-    std::vector<Input> inputs;
-    std::string line;
-    while ( std::getline(file, line) ) {
-        inputs.emplace_back(line);
-    }
-
-    std::cout << "p1: " << p1(inputs) << '\n';
-    std::cout << "p2: " << p2(inputs) << '\n';
+    print_solution(solution, expected_solution);
 }

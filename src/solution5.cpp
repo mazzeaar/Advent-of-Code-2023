@@ -1,3 +1,5 @@
+#include "../include/solution.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -44,10 +46,8 @@ struct Map {
     std::vector<Range> map(const Range& range) const
     {
         std::vector<Range> result;
-        for ( const auto& entry : entries )
-        {
-            if ( entry.canMap(range) )
-            {
+        for ( const auto& entry : entries ) {
+            if ( entry.canMap(range) ) {
                 result.push_back(entry.mapRange(range));
             }
         }
@@ -59,21 +59,17 @@ struct Map {
 std::vector<Map> getMaps(const std::string& filePath)
 {
     std::ifstream file(filePath);
-    if ( !file.is_open() )
-    {
+    if ( !file.is_open() ) {
         std::cerr << "failed to open file\n";
         return {};
     }
 
     std::string line;
     std::vector<Map> maps;
-    while ( std::getline(file, line) )
-    {
-        if ( line.find("map:") != std::string::npos )
-        {
+    while ( std::getline(file, line) ) {
+        if ( line.find("map:") != std::string::npos ) {
             Map map;
-            while ( std::getline(file, line) && !line.empty() )
-            {
+            while ( std::getline(file, line) && !line.empty() ) {
                 std::istringstream entryStream(line);
                 MapEntry entry;
                 entryStream >> entry.dest.start >> entry.source.start >> entry.source.length;
@@ -90,8 +86,7 @@ std::vector<Map> getMaps(const std::string& filePath)
 std::vector<ll> getSeeds(const std::string& path)
 {
     std::ifstream file(path);
-    if ( !file.is_open() )
-    {
+    if ( !file.is_open() ) {
         std::cerr << "failed to open file\n";
         return {};
     }
@@ -102,76 +97,65 @@ std::vector<ll> getSeeds(const std::string& path)
     ll seed;
     std::vector<ll> seeds;
     std::istringstream seedStream(line.substr(line.find(':') + 2));
-    while ( seedStream >> seed )
-    {
+    while ( seedStream >> seed ) {
         seeds.push_back(seed);
     }
 
     return seeds;
 }
 
-void p1(const std::string& path)
+template <>
+void solution<5>::part1(const std::string& input_path)
 {
-    std::vector<ll> seeds = getSeeds(path);
-    std::vector<Map> maps = getMaps(path);
+    std::vector<ll> seeds = getSeeds(input_path);
+    std::vector<Map> maps = getMaps(input_path);
 
-    ll min_loc = std::numeric_limits<ll>::max();
+    ll solution = std::numeric_limits<ll>::max();
 
-    for ( const auto& seed : seeds )
-    {
+    for ( const auto& seed : seeds ) {
         Range currentRange = { seed, 1 };
-        for ( const auto& map : maps )
-        {
+        for ( const auto& map : maps ) {
             std::vector<Range> mappedRanges = map.map(currentRange);
-            if ( mappedRanges.empty() )
-            {
+            if ( mappedRanges.empty() ) {
                 break;
             }
 
             currentRange = mappedRanges[0];
         }
 
-        min_loc = std::min(min_loc, currentRange.start);
+        solution = std::min(solution, currentRange.start);
     }
 
-    std::cout << "p1: " << min_loc << "\n";
+    const ll expected_solution = 57075758;
+    print_solution(solution, expected_solution);
 }
 
-void p2(const std::string& path)
+template <>
+void solution<5>::part2(const std::string& input_path)
 {
-    std::vector<ll> seeds = getSeeds(path);
-    std::vector<Map> maps = getMaps(path);
+    std::vector<ll> seeds = getSeeds(input_path);
+    std::vector<Map> maps = getMaps(input_path);
 
-    ll min_loc = std::numeric_limits<ll>::max();
+    ll solution = std::numeric_limits<ll>::max();
 
-    for ( int i = 0; i < seeds.size(); i += 2 )
-    {
+    for ( int i = 0; i < seeds.size(); i += 2 ) {
         Range currentRange = { seeds[i], seeds[i + 1] };
         std::vector<Range> currentRanges = { currentRange };
 
-        for ( const auto& map : maps )
-        {
+        for ( const auto& map : maps ) {
             std::vector<Range> newRanges;
-            for ( const auto& range : currentRanges )
-            {
+            for ( const auto& range : currentRanges ) {
                 auto mappedRanges = map.map(range);
                 newRanges.insert(newRanges.end(), mappedRanges.begin(), mappedRanges.end());
             }
             currentRanges = newRanges;
         }
 
-        for ( const auto& range : currentRanges )
-        {
-            min_loc = std::min(min_loc, range.start);
+        for ( const auto& range : currentRanges ) {
+            solution = std::min(solution, range.start);
         }
     }
 
-    std::cout << "p2: " << min_loc << "\n";
-}
-
-int main()
-{
-    const std::string filePath = "input.txt";
-    p1(filePath);
-    p2(filePath);
+    const ll expected_solution = 31161857;
+    print_solution(solution, expected_solution);
 }

@@ -1,10 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <set>
-#include <sstream>
-#include <cmath>
+#include "../include/solution.h"
 
 struct card {
     std::set<int> winning;
@@ -19,32 +13,17 @@ struct card {
     }
 };
 
-void print(const card& c)
-{
-    std::cout << "w: ";
-    for ( const auto& i : c.winning ) std::cout << i << ' ';
-
-    std::cout << "d: ";
-    for ( const auto& i : c.deck ) std::cout << i << ' ';
-
-    std::cout << '\n';
-}
-
-void print(const std::vector<card>& cards) { for ( const auto& c : cards ) print(c); }
-
 std::vector<card> input(const std::string& path)
 {
     std::fstream file(path, std::ios::in);
-    if ( !file.is_open() )
-    {
+    if ( !file.is_open() ) {
         std::cout << "Failed to open file\n";
         return {};
     }
 
     std::string line;
     std::vector<card> cards;
-    while ( std::getline(file, line) )
-    {
+    while ( std::getline(file, line) ) {
         int num = 0;
         card c;
 
@@ -62,29 +41,30 @@ std::vector<card> input(const std::string& path)
     return cards;
 }
 
-void p1(const std::string& path)
+template <>
+void solution<4>::part1(const std::string& input_path)
 {
-    auto cards = input(path);
-    int sum = 0;
+    auto cards = input(input_path);
 
-    for ( auto& c : cards )
-    {
+    int solution = 0;
+    for ( auto& c : cards ) {
         int s = c.inter_size();
         if ( s != 0 )
-            sum += std::pow(2, s - 1);
+            solution += std::pow(2, s - 1);
     }
 
-    std::cout << "p1: " << sum << '\n';
+    const int expected_solution = 24175;
+    print_solution(solution, expected_solution);
 }
 
-void p2(const std::string& path)
+template <>
+void solution<4>::part2(const std::string& input_path)
 {
-    auto cards = input(path);
+    auto cards = input(input_path);
     std::vector<int> copies(cards.size(), 1);
 
     const int n = cards.size();
-    for ( int i = 0; i < n; ++i )
-    {
+    for ( int i = 0; i < n; ++i ) {
         int s = cards[i].inter_size();
 
         if ( s != 0 )
@@ -92,16 +72,10 @@ void p2(const std::string& path)
                 copies[j] += copies[i];
     }
 
-    int res = 0;
+    int solution = 0;
     for ( const auto& c : copies )
-        res += c;
+        solution += c;
 
-    std::cout << "p2: " << res << '\n';
-}
-
-int main()
-{
-    const std::string file = "input.txt";
-    p1(file);
-    p2(file);
+    const int expected_solution = 18846301;
+    print_solution(solution, expected_solution);
 }
