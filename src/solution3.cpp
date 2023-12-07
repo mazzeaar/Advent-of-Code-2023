@@ -7,15 +7,13 @@
 #include <cctype>
 #include <set>
 
-using schema = std::vector<std::vector<char>>;
-
 inline bool is_symbol(char s)
 {
     return s != '.' && !isdigit(s);
 }
 
 // inefficient but idc
-bool is_part(const schema& s, int row, int col, int nsize)
+bool is_part(const std::vector<std::vector<char>>& s, int row, int col, int nsize)
 {
     for ( int i = 0; i < nsize; ++i ) {
         int currentCol = col + i;
@@ -39,63 +37,20 @@ bool is_part(const schema& s, int row, int col, int nsize)
     return false;
 }
 
-schema getinput(const std::string& path)
+std::vector<std::vector<char>> getinput(const std::string& path)
 {
-    schema input;
-    std::string line;
-    std::ifstream file(path);
+    std::vector<std::vector<char>> s;
+    std::vector<std::string> input = get_input(path);
 
-    if ( !file.is_open() ) {
-        std::cout << "Failed to open file\n";
-        return {};
-    }
-
-    while ( std::getline(file, line) ) {
+    for ( auto& line : input ) {
         std::vector<char> cline(line.begin(), line.end());
-        input.push_back(cline);
+        s.push_back(cline);
     }
 
-    return input;
+    return s;
 }
 
-void p1(const std::string& path)
-{
-    schema input = getinput(path);
-
-    if ( input.empty() ) {
-        std::cout << "No input data found.\n";
-        return;
-    }
-
-    unsigned long long sum = 0;
-    const int h = input.size();
-    const int w = input[0].size();
-
-    for ( int r = 0; r < h; ++r ) {
-        for ( int c = 0; c < w; ++c ) {
-            if ( isdigit(input[r][c]) ) {
-                int nsize = 0;
-                for ( int i = c; i < w && isdigit(input[r][i]); ++i ) {
-                    nsize++;
-                }
-
-                if ( is_part(input, r, c, nsize) ) {
-                    int number = 0;
-                    for ( int i = c; i < c + nsize; ++i ) {
-                        number = number * 10 + (input[r][i] - '0');
-                    }
-                    sum += number;
-                }
-
-                c += nsize - 1;
-            }
-        }
-    }
-
-    std::cout << "p1: " << sum << "\n";
-}
-
-unsigned long long gear_ratio(const schema& s, int r, int c)
+unsigned long long gear_ratio(const std::vector<std::vector<char>>& s, int r, int c)
 {
     std::set<int> unique_parts;
 
@@ -126,12 +81,7 @@ unsigned long long gear_ratio(const schema& s, int r, int c)
 template <>
 void solution<3>::part1(const std::string& input_path)
 {
-    schema input = getinput(input_path);
-
-    if ( input.empty() ) {
-        std::cout << "No input data found.\n";
-        return;
-    }
+    std::vector<std::vector<char>> input = getinput(input_path);
 
     unsigned long long sum = 0;
     const int h = input.size();
@@ -165,7 +115,7 @@ void solution<3>::part1(const std::string& input_path)
 template <>
 void solution<3>::part2(const std::string& input_path)
 {
-    schema input = getinput(input_path);
+    std::vector<std::vector<char>> input = getinput(input_path);
     unsigned long long total_gear_ratio = 0;
     const int h = input.size();
     const int w = input[0].size();

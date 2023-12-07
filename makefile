@@ -17,9 +17,9 @@ solved_solutions: FLAGS = -DPRINT_SOLVED -DPRINT_ALL
 solved_solutions: $(TARGET)
 
 $(TARGET): main.cpp
-	$(CC) $(F) $(FLAGS) main.cpp -o $@
-	./$@
-	rm $@
+	@$(CC) $(F) $(FLAGS) main.cpp -o $@
+	@./$@
+	@rm $@
 
 help:
 	@echo "Usage: make [TARGET]"
