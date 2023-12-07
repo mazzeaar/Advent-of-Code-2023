@@ -79,7 +79,7 @@ struct Input {
     }
 };
 
-int compute_score(const std::vector<Input>& input)
+inline int compute_score(const std::vector<Input>& input)
 {
     int sum = 0;
     for ( int i = 0; i < input.size(); ++i ) {
@@ -101,10 +101,8 @@ void solution<7>::part1(const std::string& input_path)
         return lhs.comparator(rhs, false);
     });
 
-    int solution = compute_score(parsed_input);
     const int expected_solution = 250232501;
-
-    print_solution(solution, expected_solution);
+    print_solution(compute_score(parsed_input), expected_solution);
 }
 
 template <>
@@ -119,8 +117,6 @@ void solution<7>::part2(const std::string& input_path)
         return lhs.comparator(rhs, true);
     });
 
-    int solution = compute_score(parsed_input);
     const int expected_solution = 249138943;
-
-    print_solution(solution, expected_solution);
+    print_solution(compute_score(parsed_input), expected_solution);
 }
