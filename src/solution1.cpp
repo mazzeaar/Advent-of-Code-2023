@@ -1,6 +1,5 @@
 #include "../include/solution.h"
 
-// global vairable for only this file
 static const std::array<std::string, 9> numbers = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
 inline std::string& replace_literal_numbers(std::string& line)
@@ -8,7 +7,7 @@ inline std::string& replace_literal_numbers(std::string& line)
     for ( int i = 0; i < numbers.size(); ++i ) {
         size_t idx = 0;
         while ( (idx = line.find(numbers[i], idx)) != std::string::npos ) {
-            // one -> o1e (this way twone -> t2o1e, instead of 2ne)
+            // "one" -> "o1e" (this way "twone" -> "t2o1e", instead of "2ne")
             line.replace(++idx, 1, std::to_string(i + 1));
         }
     }
