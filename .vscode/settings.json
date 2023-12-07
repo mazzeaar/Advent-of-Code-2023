@@ -55,6 +55,9 @@
         "unordered_map": "cpp",
         "sstream": "cpp",
         "map": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "variant": "cpp"
     }
 }
