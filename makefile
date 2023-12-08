@@ -1,5 +1,5 @@
 CC = g++
-F = -std=c++17 -O3
+F = -std=c++17 -Ofast
 TARGET = main
 
 DEFAULT_FLAGS = -DCURRENT_DAY -DTIME_SOLUTIONS

@@ -55,15 +55,15 @@ hand_type get_type(const std::string& hand, bool consider_jokers)
     else return high_card;
 }
 
-struct Input {
+struct Input7 {
     std::string hand;
     int bid;
 
-    Input(const std::string& in)
+    Input7(const std::string& in)
         : hand(in.substr(0, in.find(" "))), bid(std::stoi(in.substr(in.find(" ") + 1)))
     { }
 
-    bool comparator(const Input& rhs, bool consider_jokers) const
+    bool comparator(const Input7& rhs, bool consider_jokers) const
     {
         hand_type lhs_type = get_type(hand, consider_jokers), rhs_type = get_type(rhs.hand, consider_jokers);
         if ( lhs_type != rhs_type ) return lhs_type < rhs_type;
@@ -79,7 +79,7 @@ struct Input {
     }
 };
 
-inline int compute_score(const std::vector<Input>& input)
+inline int compute_score(const std::vector<Input7>& input)
 {
     int sum = 0;
     for ( int i = 0; i < input.size(); ++i ) {
@@ -92,12 +92,12 @@ inline int compute_score(const std::vector<Input>& input)
 template <>
 void solution<7>::part1(const std::string& input_path)
 {
-    std::vector<Input> parsed_input;
+    std::vector<Input7> parsed_input;
     for ( const auto& line : get_input(input_path) ) {
         parsed_input.emplace_back(line);
     }
 
-    std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input& lhs, const Input& rhs) {
+    std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input7& lhs, const Input7& rhs) {
         return lhs.comparator(rhs, false);
     });
 
@@ -108,12 +108,12 @@ void solution<7>::part1(const std::string& input_path)
 template <>
 void solution<7>::part2(const std::string& input_path)
 {
-    std::vector<Input> parsed_input;
+    std::vector<Input7> parsed_input;
     for ( const auto& line : get_input(input_path) ) {
         parsed_input.emplace_back(line);
     }
 
-    std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input& lhs, const Input& rhs) {
+    std::sort(parsed_input.begin(), parsed_input.end(), [ ] (const Input7& lhs, const Input7& rhs) {
         return lhs.comparator(rhs, true);
     });
 

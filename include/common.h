@@ -15,6 +15,9 @@
 #include <numeric>
 #include <cctype>
 
+#include <thread>
+
+
 /*
 generic input reading function
 returns a vector of strings that can be parsed later
