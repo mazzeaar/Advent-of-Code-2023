@@ -20,21 +20,14 @@ struct cubes {
         std::string color;
 
         while ( segmentStream >> quantity >> color ) {
-            if ( color.back() == ',' )
-                color.pop_back();
+            if ( color.back() == ',' ) color.pop_back();
 
-            if ( color == "red" )
-                r += quantity;
-            else if ( color == "green" )
-                g += quantity;
-            else if ( color == "blue" )
-                b += quantity;
+            if ( color == "red" ) r += quantity;
+            else if ( color == "green" ) g += quantity;
+            else if ( color == "blue" ) b += quantity;
         }
     }
 };
-
-
-static const std::map<std::string, int cubes::*> colorMap = { {"red", &cubes::r}, {"green", &cubes::g}, {"blue", &cubes::b} };
 
 std::vector<cubes> parseGame(const std::string& line)
 {

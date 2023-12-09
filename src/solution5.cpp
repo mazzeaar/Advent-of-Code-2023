@@ -7,19 +7,17 @@
 #include <fstream>
 #include <sstream>
 
-using ll = long long;
-
 struct Range {
-    ll start;
-    ll length;
+    long long start;
+    long long length;
 
-    inline bool contains(ll value) const { return value >= start && value < start + length; }
+    inline bool contains(long long value) const { return value >= start && value < start + length; }
     inline bool intersects(const Range& range) const { return range.start < start + length && range.start + range.length > start; }
 
     Range intersect(const Range& range) const
     {
-        ll startOffset = std::max(range.start, start) - start;
-        ll endOffset = std::min(range.start + range.length, start + length) - start;
+        long long startOffset = std::max(range.start, start) - start;
+        long long endOffset = std::min(range.start + range.length, start + length) - start;
         return { start + startOffset, endOffset - startOffset };
     }
 };
@@ -83,7 +81,7 @@ std::vector<Map> getMaps(const std::string& filePath)
     return maps;
 }
 
-std::vector<ll> getSeeds(const std::string& path)
+std::vector<long long> getSeeds(const std::string& path)
 {
     std::ifstream file(path);
     if ( !file.is_open() ) {
@@ -94,23 +92,16 @@ std::vector<ll> getSeeds(const std::string& path)
     std::string line;
     while ( getline(file, line) && line.find("seeds:") == std::string::npos );
 
-    ll seed;
-    std::vector<ll> seeds;
-    std::istringstream seedStream(line.substr(line.find(':') + 2));
-    while ( seedStream >> seed ) {
-        seeds.push_back(seed);
-    }
-
-    return seeds;
+    return parse_string_of_numbers<long long>(line.substr(line.find(':') + 2));
 }
 
 template <>
 void solution<5>::part1(const std::string& input_path)
 {
-    std::vector<ll> seeds = getSeeds(input_path);
+    std::vector<long long> seeds = getSeeds(input_path);
     std::vector<Map> maps = getMaps(input_path);
 
-    ll solution = std::numeric_limits<ll>::max();
+    long long solution = std::numeric_limits<long long>::max();
 
     for ( const auto& seed : seeds ) {
         Range currentRange = { seed, 1 };
@@ -126,17 +117,17 @@ void solution<5>::part1(const std::string& input_path)
         solution = std::min(solution, currentRange.start);
     }
 
-    const ll expected_solution = 57075758;
+    const long long expected_solution = 57075758;
     print_solution(solution, expected_solution);
 }
 
 template <>
 void solution<5>::part2(const std::string& input_path)
 {
-    std::vector<ll> seeds = getSeeds(input_path);
+    std::vector<long long> seeds = getSeeds(input_path);
     std::vector<Map> maps = getMaps(input_path);
 
-    ll solution = std::numeric_limits<ll>::max();
+    long long solution = std::numeric_limits<long long>::max();
 
     for ( int i = 0; i < seeds.size(); i += 2 ) {
         Range currentRange = { seeds[i], seeds[i + 1] };
@@ -156,6 +147,6 @@ void solution<5>::part2(const std::string& input_path)
         }
     }
 
-    const ll expected_solution = 31161857;
+    const long long expected_solution = 31161857;
     print_solution(solution, expected_solution);
 }

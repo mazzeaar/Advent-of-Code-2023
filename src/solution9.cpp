@@ -1,25 +1,6 @@
 #include "../include/solution.h"
 
 using ll = long long;
-
-std::vector<std::vector<ll>> get_ll_input(const std::string& file_path)
-{
-    std::fstream input_file(file_path, std::ios::in);
-    if ( !input_file.is_open() ) {
-        throw std::runtime_error("COULD NOT OPEN FILE " + file_path);
-    }
-
-    std::vector<std::vector<ll>> input;
-    std::string line;
-    while ( std::getline(input_file, line) ) {
-        std::istringstream iss(line);
-        std::vector<ll> numbers((std::istream_iterator<ll>(iss)), std::istream_iterator<ll>());
-        input.push_back(numbers);
-    }
-
-    return input;
-}
-
 template <bool backtrack>
 ll extrapolateNextValue(const std::vector<ll>& sequence)
 {

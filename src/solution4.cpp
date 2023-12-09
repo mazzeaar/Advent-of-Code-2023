@@ -38,8 +38,7 @@ void solution<4>::part1(const std::string& input_path)
     int solution = 0;
     for ( auto& c : input(input_path) ) {
         int s = c.inter_size();
-        if ( s != 0 )
-            solution += std::pow(2, s - 1);
+        if ( s != 0 ) solution += std::pow(2, s - 1);
     }
 
     const int expected_solution = 24175;

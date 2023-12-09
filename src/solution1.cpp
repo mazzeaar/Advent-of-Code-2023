@@ -15,12 +15,12 @@ inline std::string& replace_literal_numbers(std::string& line)
     return line;
 }
 
-inline int parse_line(const std::string& line)
+inline int parse_line_part1(const std::string& line)
 {
     auto first_it = std::find_if(line.begin(), line.end(), [ ] (char c) { return std::isdigit(c); });
-    int first_digit = first_it != line.end() ? *first_it - '0' : 0;
-
     auto last_it = std::find_if(line.rbegin(), line.rend(), [ ] (char c) { return std::isdigit(c); });
+
+    int first_digit = first_it != line.end() ? *first_it - '0' : 0;
     int last_digit = last_it != line.rend() ? *last_it - '0' : 0;
 
     return 10 * first_digit + last_digit;
@@ -31,7 +31,7 @@ void solution<1>::part1(const std::string& input_path)
 {
     std::vector<std::string> input = get_input(input_path);
     int res = std::accumulate(input.begin(), input.end(), 0, [ ] (int acc, std::string& line) {
-        return acc + parse_line(line);
+        return acc + parse_line_part1(line);
     });
 
     const int expected_solution = 54697;
@@ -43,7 +43,7 @@ void solution<1>::part2(const std::string& input_path)
 {
     std::vector<std::string> input = get_input(input_path);
     int res = std::accumulate(input.begin(), input.end(), 0, [ ] (int acc, std::string& line) {
-        return acc + parse_line(replace_literal_numbers(line));
+        return acc + parse_line_part1(replace_literal_numbers(line));
     });
 
     const int expected_solution = 54885;

@@ -7,10 +7,7 @@
 #include <cctype>
 #include <set>
 
-inline bool is_symbol(char s)
-{
-    return s != '.' && !std::isdigit(s);
-}
+inline bool is_symbol(char s) { return s != '.' && !std::isdigit(s); }
 
 // inefficient but idc
 bool is_part(const std::vector<std::string>& s, int row, int col, int nsize)
