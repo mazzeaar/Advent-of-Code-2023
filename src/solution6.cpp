@@ -11,7 +11,7 @@ ll nr_winning_ways(const race& race)
 {
     ll winning_ways = 0;
     for ( ll hold_time = 0; hold_time < race.time; ++hold_time ) {
-        if ( (race.time * hold_time) - (hold_time * hold_time) > race.dist ) {
+        if ( ((race.time - hold_time) * hold_time) > race.dist ) {
             ++winning_ways;
         }
     }
