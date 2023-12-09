@@ -20,41 +20,39 @@ std::vector<std::vector<ll>> get_ll_input(const std::string& file_path)
     return input;
 }
 
-std::vector<ll> generateDiffSequence(const std::vector<ll>& sequence)
+template <bool backtrack>
+ll extrapolateNextValue(const std::vector<ll>& sequence)
 {
-    std::vector<ll> difference;
-    std::adjacent_difference(sequence.begin(), sequence.end(), std::back_inserter(difference));
-    difference.erase(difference.begin()); // first elem is always 0 and not a difference
-    return difference;
-}
-
-ll extrapolateNextValue(const std::vector<ll>& sequence, bool backward = false)
-{
-    std::vector<std::vector<ll>> sequences;
-    sequences.push_back(sequence);
+    std::vector<std::vector<ll>> sequences(1, sequence);
 
     // generate diff sequences
     while ( true ) {
-        auto diffSequence = generateDiffSequence(sequences.back());
+        std::vector<ll> diffSequence;
+        std::adjacent_difference(sequences.back().begin(), sequences.back().end(), std::back_inserter(diffSequence));
+        diffSequence.erase(diffSequence.begin()); // first elem is always 0 and not a difference
+
         if ( std::all_of(diffSequence.begin(), diffSequence.end(), [ ] (ll n) { return n == 0; }) ) {
             break;
         }
+
         sequences.push_back(diffSequence);
     }
 
-    // backtrack and extrapolate
-    if ( backward ) {
-        for ( int i = sequences.size() - 2; i >= 0; --i ) {
+    for ( int i = sequences.size() - 2; i >= 0; --i ) {
+        if constexpr ( backtrack ) {
             sequences[i].insert(sequences[i].begin(), sequences[i].front() - sequences[i + 1].front());
         }
-    }
-    else {
-        for ( int i = sequences.size() - 2; i >= 0; --i ) {
+        else {
             sequences[i].push_back(sequences[i].back() + sequences[i + 1].back());
         }
     }
 
-    return backward ? sequences.front().front() : sequences.front().back();
+    if constexpr ( backtrack ) {
+        return sequences.front().front();
+    }
+    else {
+        return sequences.front().back();
+    }
 }
 
 template <>
@@ -62,9 +60,8 @@ void solution<9>::part1(const std::string& input_path)
 {
     auto input = get_ll_input(input_path);
 
-    ll result = std::accumulate(input.begin(), input.end(), 0LL,
-    [ ] (ll acc, const auto& seq) {
-        return acc + extrapolateNextValue(seq);
+    ll result = std::accumulate(input.begin(), input.end(), 0LL, [ ] (ll acc, const auto& seq) {
+        return acc + extrapolateNextValue<false>(seq);
     });
 
     const ll expected = 1969958987;
@@ -76,9 +73,8 @@ void solution<9>::part2(const std::string& input_path)
 {
     auto input = get_ll_input(input_path);
 
-    ll result = std::accumulate(input.begin(), input.end(), 0LL,
-    [ ] (ll acc, const auto& seq) {
-        return acc + extrapolateNextValue(seq, true);
+    ll result = std::accumulate(input.begin(), input.end(), 0LL, [ ] (ll acc, const auto& seq) {
+        return acc + extrapolateNextValue<true>(seq);
     });
 
     const ll expected = 1068;
