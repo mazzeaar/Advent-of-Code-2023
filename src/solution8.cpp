@@ -100,6 +100,10 @@ int findCycleLength(Input8& parsedInput, int startNodeId, std::unordered_set<int
 template <>
 void solution<8>::part2(const std::string& input_path)
 {
+    std::cout << "implementation is wrong";
+    return;
+
+
     auto input = get_input(input_path);
     Input8 parsedInput;
     parsedInput.parse_input(input);

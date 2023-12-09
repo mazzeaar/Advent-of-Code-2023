@@ -9,6 +9,7 @@
 #include "src/solution6.cpp"
 #include "src/solution7.cpp"
 #include "src/solution8.cpp"
+#include "src/solution9.cpp"
 
 #define TIME_SOLUTIONS 1
 
