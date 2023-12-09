@@ -16,10 +16,18 @@ all_solutions: $(TARGET)
 solved_solutions: FLAGS = -DPRINT_SOLVED -DPRINT_ALL
 solved_solutions: $(TARGET)
 
+
+# run specific day
+day:
+	@$(CC) $(F) $(FLAGS) -DPRINT_SPECIFIC_DAY=$(DAY) main.cpp -o $(TARGET)
+	@./$(TARGET)
+	@rm $(TARGET)
+
 $(TARGET): main.cpp
 	@$(CC) $(F) $(FLAGS) main.cpp -o $@
 	@./$@
 	@rm $@
+
 
 help:
 	@echo "Usage: make [TARGET]"
@@ -28,6 +36,7 @@ help:
 	@echo " all - run only current day"
 	@echo " all_solutions - run all solutions"
 	@echo " solved_solutions - run only solved solutions"
+	@echo " day DAY=N - run specific day"
 	@echo " help - print this help message"
 
-.PHONY: all all_solutions solved_solutions help
+.PHONY: all all_solutions solved_solutions help day
