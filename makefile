@@ -28,7 +28,6 @@ $(TARGET): main.cpp
 	@./$@
 	@rm $@
 
-
 help:
 	@echo "Usage: make [TARGET]"
 	@echo "TARGETS:"

@@ -69,61 +69,9 @@ void solution<8>::part1(const std::string& input_path)
     print_solution(steps, expected);
 }
 
-int findCycleLength(Input8& parsedInput, int startNodeId, std::unordered_set<int>& visited)
-{
-    std::unordered_set<int> localVisited;
-    int steps = 0;
-    int currentNodeId = startNodeId;
-
-    while ( true ) {
-        if ( visited.count(currentNodeId) || localVisited.count(currentNodeId) ) {
-            break;
-        }
-
-        localVisited.insert(currentNodeId);
-        visited.insert(currentNodeId);
-
-        char dir = parsedInput.directions[steps % parsedInput.directions.size()];
-        Node* currentNode = &parsedInput.nodes[currentNodeId];
-        currentNodeId = (dir == 'L') ? currentNode->left->id : currentNode->right->id;
-
-        steps++;
-        if ( currentNodeId == startNodeId ) {
-            break;
-        }
-    }
-
-    return (steps > 1) ? steps : 0;
-}
-
-// answer is wrong and im tired. its probably solvable by implementing a clean graph search data structure
 template <>
 void solution<8>::part2(const std::string& input_path)
 {
-    std::cout << "implementation is wrong";
+    std::cout << "NOT IMPLEMENTED";
     return;
-
-
-    auto input = get_input(input_path);
-    Input8 parsedInput;
-    parsedInput.parse_input(input);
-
-    std::unordered_set<int> visited;
-    std::vector<int> cycleLengths;
-
-    for ( auto& nodePair : parsedInput.nameToIdMap ) {
-        if ( nodePair.first.back() == 'Z' && visited.find(nodePair.second) == visited.end() ) {
-            int cycleLength = findCycleLength(parsedInput, nodePair.second, visited);
-            if ( cycleLength > 0 ) {
-                cycleLengths.push_back(cycleLength);
-            }
-        }
-    }
-
-    int lcm = cycleLengths.empty() ? 0 : cycleLengths[0];
-    for ( size_t i = 1; i < cycleLengths.size(); ++i ) {
-        lcm = std::lcm(lcm, cycleLengths[i]);
-    }
-
-    std::cout << lcm;
 }

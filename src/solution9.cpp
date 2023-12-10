@@ -1,18 +1,17 @@
 #include "../include/solution.h"
 
-using ll = long long;
 template <bool backtrack>
-ll extrapolateNextValue(const std::vector<ll>& sequence)
+long long extrapolateNextValue(const std::vector<long long>& sequence)
 {
-    std::vector<std::vector<ll>> sequences(1, sequence);
+    std::vector<std::vector<long long>> sequences(1, sequence);
 
     // generate diff sequences
     while ( true ) {
-        std::vector<ll> diffSequence;
+        std::vector<long long> diffSequence;
         std::adjacent_difference(sequences.back().begin(), sequences.back().end(), std::back_inserter(diffSequence));
         diffSequence.erase(diffSequence.begin()); // first elem is always 0 and not a difference
 
-        if ( std::all_of(diffSequence.begin(), diffSequence.end(), [ ] (ll n) { return n == 0; }) ) {
+        if ( std::all_of(diffSequence.begin(), diffSequence.end(), [ ] (long long n) { return n == 0; }) ) {
             break;
         }
 
@@ -40,12 +39,11 @@ template <>
 void solution<9>::part1(const std::string& input_path)
 {
     auto input = get_ll_input(input_path);
-
-    ll result = std::accumulate(input.begin(), input.end(), 0LL, [ ] (ll acc, const auto& seq) {
+    long long result = std::accumulate(input.begin(), input.end(), 0LL, [ ] (long long acc, const auto& seq) {
         return acc + extrapolateNextValue<false>(seq);
     });
 
-    const ll expected = 1969958987;
+    const long long expected = 1969958987;
     print_solution(result, expected);
 }
 
@@ -53,11 +51,10 @@ template <>
 void solution<9>::part2(const std::string& input_path)
 {
     auto input = get_ll_input(input_path);
-
-    ll result = std::accumulate(input.begin(), input.end(), 0LL, [ ] (ll acc, const auto& seq) {
+    int result = std::accumulate(input.begin(), input.end(), 0LL, [ ] (long long acc, const auto& seq) {
         return acc + extrapolateNextValue<true>(seq);
     });
 
-    const ll expected = 1068;
+    const int expected = 1068;
     print_solution(result, expected);
 }
