@@ -68,10 +68,3 @@ void solution<8>::part1(const std::string& input_path)
     const int expected = 17141;
     print_solution(steps, expected);
 }
-
-template <>
-void solution<8>::part2(const std::string& input_path)
-{
-    std::cout << "NOT IMPLEMENTED";
-    return;
-}

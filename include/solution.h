@@ -7,12 +7,12 @@ template <int DAY>
 struct solution {
     virtual void part1(const std::string& input_path)
     {
-        std::cout << "Day " << DAY << " part 1 not implemented yet.\n";
+        std::cout << "D" << DAY << " P1 not implemented";
     }
 
     virtual void part2(const std::string& input_path)
     {
-        std::cout << "Day " << DAY << " part 2 not implemented yet.\n";
+        std::cout << "D" << DAY << " P2 not implemented";
     }
 
     virtual ~solution() { }

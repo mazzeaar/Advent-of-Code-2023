@@ -76,13 +76,6 @@ void solution<10>::part1(const std::string& input_path)
         }
     }
 
-    print_memo(memo);
     const int expected = 6968;
     print_solution(result, expected);
-}
-
-template <>
-void solution<10>::part2(const std::string& input_path)
-{
-    grid grid = get_input(input_path);
 }
