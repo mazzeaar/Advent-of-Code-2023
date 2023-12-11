@@ -26,30 +26,19 @@ std::vector<point> get_galaxy_coordinates(grid& grid, int expansion_dist)
 
     std::vector<int> col_insert_positions;
     for ( int col = 0; col < grid[0].size(); ++col ) {
-        bool empty = true;
-        for ( int row = 0; row < grid.size(); ++row ) {
-            empty &= grid[row][col] == EMPTY_SPACE;
-        }
-
-        if ( empty ) {
+        if ( std::all_of(grid.begin(), grid.end(), [&] (const std::string& row) { return row[col] == EMPTY_SPACE; }) ) {
             col_insert_positions.push_back(col);
         }
     }
 
     for ( point& galaxy : galaxies ) {
-        int add_to_row = 0;
-        for ( int row_insert_pos : row_insert_positions ) {
-            if ( galaxy.first > row_insert_pos ) {
-                ++add_to_row;
-            }
-        }
+        int add_to_row = std::count_if(row_insert_positions.begin(), row_insert_positions.end(),
+            [&] (int row_insert_pos) { return galaxy.first > row_insert_pos;
+        });
 
-        int add_to_col = 0;
-        for ( int col_insert_pos : col_insert_positions ) {
-            if ( galaxy.second > col_insert_pos ) {
-                ++add_to_col;
-            }
-        }
+        int add_to_col = std::count_if(col_insert_positions.begin(), col_insert_positions.end(),
+            [&] (int col_insert_pos) { return galaxy.second > col_insert_pos;
+        });
 
         galaxy.first += (add_to_row * expansion_dist);
         galaxy.second += (add_to_col * expansion_dist);
@@ -89,7 +78,6 @@ void solution<11>::part2(const std::string& input_path)
     std::vector<point> galaxies = get_galaxy_coordinates(grid, 999999);
 
     long long result = sum_manhattan(galaxies);
-
     const long long expected = 618800410814;
     print_solution(result, expected);
 }
