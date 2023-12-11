@@ -55,7 +55,7 @@ void solution<10>::part1(const std::string& input_path)
     int result = 0;
 
     point start = find_starting_point(grid);
-    grid[start.first][start.second] = 'F';
+    grid[start.first][start.second] = 'F'; // solved the replacement letter visually
     memo[start.first][start.second] = 0;
 
     std::queue<point> queue;
@@ -76,6 +76,7 @@ void solution<10>::part1(const std::string& input_path)
         }
     }
 
+    print_memo(memo);
     const int expected = 6968;
     print_solution(result, expected);
 }

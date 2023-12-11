@@ -11,6 +11,7 @@
 #include "src/solution8.cpp"
 #include "src/solution9.cpp"
 #include "src/solution10.cpp"
+#include "src/solution11.cpp"
 
 #define TIME_SOLUTIONS 1
 
